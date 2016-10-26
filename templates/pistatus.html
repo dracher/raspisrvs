@@ -1,0 +1,27 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Parts</th>
+						<th>Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>CPU Temp</td>
+						<td>{{ .Res.cpu_t }}</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>GPU Temp</td>
+						<td>{{ .Res.gpu_t }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

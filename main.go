@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/dracher/raspisrvs/routes"
 	"github.com/kataras/go-template/html"
 	"github.com/kataras/iris"
 	"github.com/spf13/viper"
 
+	"github.com/dracher/raspisrvs/routes"
+	"github.com/dracher/raspisrvs/routes/api"
 	"github.com/dracher/raspisrvs/services/airindex"
 	"github.com/dracher/raspisrvs/services/pistatus"
 )
@@ -24,10 +25,10 @@ func init() {
 
 func main() {
 
-	dev := viper.GetString("dev")
+	dev := viper.GetBool("dev")
 	addr := viper.GetString("addr")
 
-	if dev == "true" {
+	if dev {
 		iris.Logger.Println("Current in dev mode")
 		devConfig()
 	} else {
@@ -83,6 +84,8 @@ func registeRouter() {
 }
 
 func registeAPI() {
-	iris.Get("/airindex/:city", routes.AirIndex)
-	// iris.Get("/pistatus", routes.PiStatus)
+	apiv1 := iris.Party("/api/v1")
+
+	apiv1.Get("/airindex/:city", api.AirIndex)
+	apiv1.Get("/pistatus", api.PiStatus)
 }

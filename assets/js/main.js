@@ -15,7 +15,7 @@ $(function () {
 });
 
 var getAQIData = function () {
-  var aqi_url = "/airindex/";
+  var aqi_url = "/api/v1/airindex/";
   var city_list = [
     "beijing",
     "chengdu",

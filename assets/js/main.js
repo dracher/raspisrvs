@@ -58,6 +58,10 @@ var getAQIData = function () {
 
       var myChart = Highcharts.chart(value, {
 
+        credits: {
+            enabled: false
+        },
+
         title: {
           text: ret[0][23] + ' ' + city_name_mapper[value] + ' AQI is  ' + ret[2][0]
         },

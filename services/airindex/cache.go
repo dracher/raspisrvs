@@ -59,14 +59,16 @@ func fetchData(url string) ([]Item, error) {
 }
 
 // NewAqiData is
-func NewAqiData() *AqiData {
+func NewAqiData(dev bool) *AqiData {
 	ret := &AqiData{
 		Result:    make(map[string][][]string),
 		lock:      &sync.Mutex{},
 		pollValue: 3600,
 		pollFreq:  1810 * time.Second,
 	}
-	go ret.UpdateData()
+	if !dev {
+		go ret.UpdateData()
+	}
 	return ret
 }
 

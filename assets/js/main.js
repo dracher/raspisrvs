@@ -7,11 +7,28 @@ I suggest you do it using 'gulp', but its your decision, you can use webpack als
 
 $(function () {
 
+  $('.ui.accordion')
+    .accordion()
+    ;
+
   var pathname = window.location.pathname;
 
   if (pathname === "/aqi") {
     getAQIData()
-  }
+  };
+
+  if (pathname === "/pistatus") {
+    w = new Ws("ws://" + HOST + "/ws");
+
+    w.OnConnect(function () {
+      console.log("Websocket connection established");
+    });
+
+    w.On("cpu", function (message) {
+      // console.log(message)
+      $("#cpu_t").text(message)
+    });
+  };
 });
 
 var getAQIData = function () {

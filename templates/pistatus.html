@@ -1,27 +1,25 @@
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-xs">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Parts</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>CPU Temp</td>
-						<td>{{ .Res.cpu_t }}</td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td>GPU Temp</td>
-						<td>{{ .Res.gpu_t }}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
+<table class="ui inverted blue  table">
+  <thead>
+    <tr>
+      <th colspan="3">
+        Eric'Pi DashBoard
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CPU Temp</td>
+      <td><a class="ui orange label">{{ .Res.cpu_t }}</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>GPU Temp</td>
+      <td><a class="ui orange label">{{ .Res.gpu_t }}</a></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+		var HOST = {{.Host}}
+</script>

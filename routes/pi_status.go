@@ -10,5 +10,8 @@ func PiStatusPage(ctx *iris.Context) {
 	piStatus := ctx.Get("piStatus").(*pistatus.PiStatus)
 
 	res := piStatus.Get()
-	ctx.MustRender("pistatus.html", struct{ Res map[string]string }{Res: res})
+	ctx.MustRender("pistatus.html", struct {
+		Res  map[string]string
+		Host string
+	}{Res: res, Host: ctx.HostString()})
 }

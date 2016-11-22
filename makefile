@@ -16,11 +16,15 @@ prod:
 dev:
 	sed -i 's/^dev.*/dev: yes/g' conf.yml
 
-local: dev
+local: dev static
 	go run main.go bindata.go
 
-deploy: prod build-arm
-	echo "done"
+localp: prod
+	go run main.go bindata.go
+
+
+deploy: clean prod build-arm cp2remote
+	echo "Deploy finished!"
 
 .PHONY: clean
 clean:

@@ -9,10 +9,12 @@ import (
 	"github.com/dracher/raspisrvs/routes/api"
 	"github.com/dracher/raspisrvs/services/airindex"
 	"github.com/dracher/raspisrvs/services/pistatus"
+
+	"github.com/dracher/raspisrvs/services/ws"
 )
 
-var airIndexCache = airindex.NewAqiData()
-var piStatus = pistatus.NewPiStatus()
+var airIndexCache *airindex.AqiData
+var piStatus *pistatus.PiStatus
 
 func init() {
 	viper.SetConfigFile("./conf.yml")
@@ -36,6 +38,11 @@ func main() {
 		prodConfig()
 	}
 
+	wsConfig()
+
+	airIndexCache = airindex.NewAqiData(dev)
+	piStatus = pistatus.NewPiStatus()
+
 	iris.UseFunc(allCacheMiddleware)
 
 	registeRouter()
@@ -50,6 +57,11 @@ func allCacheMiddleware(ctx *iris.Context) {
 	ctx.Next()
 }
 
+func wsConfig() {
+	iris.Config.Websocket.Endpoint = "/ws"
+	ws.PiStatusInit()
+}
+
 func prodConfig() {
 
 	iris.UseTemplate(html.New(html.Config{Layout: "layout.html"})).
@@ -57,6 +69,7 @@ func prodConfig() {
 		Binary(Asset, AssetNames)
 
 	iris.StaticEmbedded("/static", ".assets", Asset, AssetNames)
+	// iris.Favicon("/static/favicon.ico")
 
 	iris.OnError(iris.StatusNotFound, func(ctx *iris.Context) {
 		ctx.Render("404.html",
@@ -70,6 +83,7 @@ func devConfig() {
 		Directory("./templates", "html")
 
 	iris.Static("/static", "./assets", 1)
+	// iris.Favicon("./assets/favicon.ico")
 
 	iris.OnError(iris.StatusNotFound, func(ctx *iris.Context) {
 		ctx.Render("404.html",
@@ -79,6 +93,7 @@ func devConfig() {
 
 func registeRouter() {
 	iris.Get("/", routes.IndexPage)
+	iris.Get("/srvs", routes.ServicesPage)
 	iris.Get("/aqi", routes.AirIndexPage)
 	iris.Get("/pistatus", routes.PiStatusPage)
 }

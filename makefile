@@ -23,6 +23,9 @@ localp: prod
 	go run main.go bindata.go
 
 
+cp2remote:
+	scp -P 2222 build/raspisrv-arm pi@dracher.mynetgear.com:/tmp
+
 deploy: clean prod build-arm cp2remote
 	echo "Deploy finished!"
 

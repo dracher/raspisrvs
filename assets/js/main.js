@@ -8,8 +8,7 @@ I suggest you do it using 'gulp', but its your decision, you can use webpack als
 $(function () {
 
   $('.ui.accordion')
-    .accordion()
-    ;
+    .accordion();
 
   var pathname = window.location.pathname;
 
@@ -57,6 +56,9 @@ var getAQIData = function () {
       var c = ret[1].map(parseFloat).reverse()
 
       var myChart = Highcharts.chart(value, {
+        credits: {
+          enabled: false
+        },
 
         credits: {
             enabled: false

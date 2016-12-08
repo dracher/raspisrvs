@@ -1,5 +1,11 @@
 SHELL = /bin/sh
 
+stopraspsrv:
+	ssh -p 2222 pi@dracher.mynetgear.com "supervisorctl stop raspsrv"
+
+startraspsrv:
+	ssh -p 2222 pi@dracher.mynetgear.com "supervisorctl start raspsrv"
+
 static:
 	go-bindata assets/... templates/...
 
@@ -24,11 +30,14 @@ localp: prod
 
 
 cp2remote:
-	scp -P 2222 build/raspisrv-arm pi@dracher.mynetgear.com:/tmp
+	scp -P 2222 build/raspisrv-arm pi@dracher.mynetgear.com:/home/pi/Projects/raspisrv
 
-deploy: clean prod build-arm cp2remote
-	echo "Deploy finished!"
+mergeui:
+	cp /home/dracher/WebstormProjects/raspsrvui/dist/index.html templates/ && cp -r /home/dracher/WebstormProjects/raspsrvui/dist/static/* assets/
 
 .PHONY: clean
 clean:
-	rm bindata.go build/*
+	rm -rf assets/* && rm bindata.go build/* 
+
+deploy: clean mergeui build-arm  stopraspsrv cp2remote startraspsrv
+	echo "Deploy finished!"

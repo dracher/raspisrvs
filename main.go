@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/go-template/html"
 	"github.com/kataras/iris"
 	"github.com/spf13/viper"
@@ -10,6 +11,7 @@ import (
 	"github.com/dracher/raspisrvs/services/airindex"
 	"github.com/dracher/raspisrvs/services/pistatus"
 
+	mw "github.com/dracher/raspisrvs/middleware"
 	"github.com/dracher/raspisrvs/services/ws"
 )
 
@@ -33,6 +35,8 @@ func main() {
 	if dev {
 		iris.Logger.Println("Current in dev mode")
 		devConfig()
+		crs := cors.New(cors.Options{AllowedOrigins: []string{"*"}})
+		iris.Use(crs)
 	} else {
 		iris.Logger.Println("Current in prod mode")
 		prodConfig()
@@ -93,13 +97,13 @@ func devConfig() {
 
 func registeRouter() {
 	iris.Get("/", routes.IndexPage)
-	iris.Get("/srvs", routes.ServicesPage)
-	iris.Get("/aqi", routes.AirIndexPage)
-	iris.Get("/pistatus", routes.PiStatusPage)
+	// iris.Get("/srvs", routes.ServicesPage)
+	// iris.Get("/aqi", routes.AirIndexPage)
+	// iris.Get("/pistatus", routes.PiStatusPage)
 }
 
 func registeAPI() {
-	apiv1 := iris.Party("/api/v1")
+	apiv1 := iris.Party("/api/v1", mw.APIJwt01.Serve)
 
 	apiv1.Get("/airindex/:city", api.AirIndex)
 	apiv1.Get("/pistatus", api.PiStatus)
